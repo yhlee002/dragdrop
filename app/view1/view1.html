@@ -1,0 +1,32 @@
+<p>This is the partial for view 1.</p>
+
+<div class="container" data-ng-app="myApp" data-ng-controller="View1Ctrl">
+    <div class="row topRow">
+        <h4 class="heading">
+            Drag and drop between the two lists.
+        </h4>
+    </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <ul ondragleave="drop_handler()">
+                <li draggable="true" (click)="onclick()"
+                    ondragstart="dragstart_handler($event)"
+                    ondragend="dragend_handler($event)"
+                    ng-repeat="man in men track by $index">
+                    {{man}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-6">
+            <ul ondragleave="drop_handler()"> <!-- ui-on-Drop : AngularJS 1.8 버전에서 제공하지 않는듯 -->
+                <li draggable="true" (click)="onclick()"
+                    ondragstart="dragstart_handler($event)"
+                    ondragend="dragend_handler($event)"
+                    ng-repeat="woman in women track by $index">
+                    {{woman}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
