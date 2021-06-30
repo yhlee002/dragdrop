@@ -1,13 +1,7 @@
 'use strict';
 
 angular
-    .module('myApp.view1', ['ngRoute', 'ngDragDrop'])
-    .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/view1', {
-            templateUrl: 'view1/view1.html',
-            controller: 'View1Ctrl'
-        });
-    }])
+    .module('myApp.view1', ['ngDragDrop'])
     .controller('View1Ctrl', function ($scope, $parse) {
 
         $scope.men = [
@@ -26,56 +20,66 @@ angular
 
         $scope.addText = "";
 
-        // // drop element(draggable element)에서 실행
-        // $scope.onDrop = function ($event, drag, array) {
-        //     // array.push($data);
-        //     event.dataTransfer.effectAllowed = "move";
-        // };
-        //
-        // // drop target에서 실행
-        // $scope.dropSuccessHandler = function ($event, index, array) {
-        //     // array.splice(index, 1);
-        //     event.dataTransfer.dropEffect = "move";
-        // };
-
         /** */
         if (window.jQuery && !window.jQuery.event.props.dataTransfer) {
-            //window.jQuery.event.props.dataTransfer란?
             window.jQuery.event.props.push('dataTransfer'); // 무슨 의미?
         }
-        // $scope.obj = "";
-        var dragData = "";
 
-        $scope.onclick= function($element){
-            dragData = $element;
-        }
-        //
-        // $scope.$watch($scope.obj, function (newValue) { // attrs.drag = "man" 혹은 "woman"
-        //     dragData = newValue;
-        // });
+        $scope.dragData = "";
 
-        $scope.drop_handler = function () {
-            event.dataTransfer.dropEffect = "move";
-        }
+        $scope.$watch($scope.dragData, function (newValue, oldValue) { // attrs.drag = "man" 혹은 "woman"
+            $scope.dragData = newValue;
+            console.log("change value of dragData");
+        }); // 처음에만 두번 동작 - 왜?
 
-        $scope.dragstart_handler = function (e) {
-            var sendData = angular.toJson(dragData); // json으로 변환
-            e.dataTransfer.setData("Text", sendData);
-        }
+    })
+    .directive("dragItem", function () {
+        return {
+            restrict: "A",
+            link: function ($scope, $element, $attr, ctrl) {
+                $element.attr("draggable", true);
+                $element.bind("dragstart", function (e) {
+                    $scope.dragData = e.target.id; // drag 되는 대상의 id
 
-        $scope.dragend_handler = function (e) {
-            event.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData("text", $scope.dragData);
+                    e.dataTransfer.effectAllowed = "move"; // 요소 이동을 허용
+                });
 
-            if (e.dataTransfer && e.dataTransfer.dropEffect !== "none") {
-                // if ($attrs.ondragend) { // cf. onDropSuccess : angularJS 1.8 버전에서 제공하는 기능이 아닌 듯
-                    // var fn = $parse($attrs.ondragend);
-                    // $scope.$apply(function () {
-                    //     fn($scope, {$event: e});
-                    // });
-                // }
-                var str = e.dataTransfer.getData("Text");
-                alert(str);
+                $element.bind("dragend", function (e) {
+                    
+                });
             }
         }
+    })
+    .directive("dropItem", function () {
+        return {
+            restrict: "A",
+            link: function ($scope, $element, $attr, controller) {
 
+                $element.bind("dragover", function (e) {
+                    e.dataTransfer.dropEffect = "move";
+                    if (e.preventDefault) { // 기본적인 Dom element의 동작 방지
+                        e.preventDefault();
+                    }
+                    if (e.stopPropagation) {
+                        e.stopPropagation();
+                    }
+                });
+
+                $element.bind("drop", function (e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move"; // drop시 요소 move 허용
+
+                    var types = e.dataTransfer.types;
+                    if (e.dataTransfer && e.dataTransfer.types !== undefined && e.dataTransfer.types !== null) {
+                        for (let i = 0; i < types.length; i++) {
+                            var jsonData = e.dataTransfer.getData("text");
+                        }
+                    }
+
+                    // 현재 요소(ul)에 자식으로 요소 추가
+                    $element[0].appendChild(document.getElementById(jsonData));
+                });
+            }
+        }
     });

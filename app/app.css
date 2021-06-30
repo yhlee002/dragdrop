@@ -7,14 +7,6 @@
   padding: 0 0 0.5em;
 }
 
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
 .menu > li {
   display: inline;
 }
@@ -22,4 +14,8 @@
 .menu > li + li:before {
   content: "|";
   padding-right: 0.3em;
+}
+
+.topRow{
+  margin-bottom : 30px;
 }

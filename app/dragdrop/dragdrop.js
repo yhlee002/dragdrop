@@ -41,7 +41,7 @@ angular
             })
         };
     }
-    ]); // $parse란?
+    ]);
 /**
  * DataTransfer(event.dataTransfer) : Drag & Drop 되는 대상 Data를 담는 역할
  *

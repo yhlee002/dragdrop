@@ -8,20 +8,18 @@
     </div>
     <div class="row">
         <div class="col-xs-6">
-            <ul ondragleave="drop_handler()">
-                <li draggable="true" (click)="onclick()"
-                    ondragstart="dragstart_handler($event)"
-                    ondragend="dragend_handler($event)"
+            <ul drop-item id="target1">
+                <li id="man{{$index}}"
+                    drag-item
                     ng-repeat="man in men track by $index">
                     {{man}}
                 </li>
             </ul>
         </div>
         <div class="col-xs-6">
-            <ul ondragleave="drop_handler()"> <!-- ui-on-Drop : AngularJS 1.8 버전에서 제공하지 않는듯 -->
-                <li draggable="true" (click)="onclick()"
-                    ondragstart="dragstart_handler($event)"
-                    ondragend="dragend_handler($event)"
+            <ul drop-item id="target2"> <!-- ui-on-Drop : AngularJS 1.8 버전에서 제공하지 않는듯 -->
+                <li id="woman{{$index}}"
+                    drag-item
                     ng-repeat="woman in women track by $index">
                     {{woman}}
                 </li>
