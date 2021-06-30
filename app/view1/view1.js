@@ -69,15 +69,6 @@ angular
 
                     // 드래그해온 element(A)를 dragover하는 element(B)의 '다음' 순서로 존재하기 위한 코드
                     targetId = e.target.id; // 현재 dragover 되고 있는 대상(B)
-                    // let parent = target.parent();
-                    // // 현재 dragover 되고 있는 대상(B)의 노드 순서(부모 노드의 자식 노드 중 자신의 순서)
-                    // if(parent.hasChildNodes()){
-                    //     for(let i = 0; i < parent.childNodes; i++){
-                    //         if (parent.childNodes[i] == target){
-                    //             index = i;
-                    //         }
-                    //     }
-                    // }
 
                 });
 
@@ -86,20 +77,15 @@ angular
                     e.dataTransfer.dropEffect = "move"; // drop시 요소 move 허용
 
                     var types = e.dataTransfer.types;
-                    console.log(types);
                     if (e.dataTransfer && e.dataTransfer.types !== undefined && e.dataTransfer.types !== null) {
-                        // for (let i = 0; i < types.length; i++) {
-                        //     var jsonData = e.dataTransfer.getData("text");
-                        // }
                         var data = e.dataTransfer.getData("text");
                     }
 
-                    // 현재 요소(ul)에 자식으로 요소 추가
-                    // $element[0].appendChild(document.getElementById(jsonData));
-                    console.log("옮길 데이터", data);
-                    console.log("참조 데이터", targetId);
+                    let newNode = document.getElementById(data);
+                    // insertBefore의 기준이 되는 노드(2번째 인자)는 반드시 해당 (부모) 노드의 자식 노트여야함
+                    let refNode = document.getElementById(targetId);
 
-                    $element[0].insertBefore(document.getElementById(data), document.getElementById(targetId));
+                    $element[0].insertBefore(newNode, refNode);
                 });
             }
         }
